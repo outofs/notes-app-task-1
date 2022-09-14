@@ -5,10 +5,154 @@
     <meta http-equiv="X-UA-Compatible" content="IE=edge" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link rel="stylesheet" href="./src/styles/style.css" />
+    <link
+      rel="stylesheet"
+      href="https://unicons.iconscout.com/release/v4.0.0/css/line.css"
+    />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Karla:wght@400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <script type="defer" src="./src/script.js"></script>
     <title>Document</title>
   </head>
   <body>
-    <h1>Hello world!</h1>
+    <div class="component-header notes-header">
+      <h3 class="header-name">Name</h3>
+      <h3 class="header-created">Created</h3>
+      <h3 class="header-category">Category</h3>
+      <h3 class="header-content">Content</h3>
+      <h3 class="header-dates">Dates</h3>
+      <div class="header-archive-remove-icons">
+        <div class="header-archive-icon"><i class="uil uil-archive"></i></div>
+        <div class="header-archive-icon"><i class="uil uil-trash"></i></div>
+      </div>
+    </div>
+
+    <main class="notes-main">
+      <section class="current-notes">
+        <div class="notes-container">
+          <div class="container-content note-content">
+            <div class="note-icon-title-container">
+              <div class="icon-container">
+                <i class="uil uil-shopping-cart-alt note-icon"></i>
+              </div>
+              <h3>Note Title</h3>
+            </div>
+            <div class="date-created">
+              <h4>April 20, 2021</h4>
+            </div>
+            <div class="name-category">
+              <h4>Task</h4>
+            </div>
+            <div class="content">
+              <h4>Tomatoes, bread</h4>
+            </div>
+            <div class="dates">
+              <h4>25/5/2021, 5/5/2021</h4>
+            </div>
+            <div class="btns-container">
+              <div class="btn-edit"><i class="uil uil-pen"></i></div>
+              <div class="btn-archive"><i class="uil uil-archive-alt"></i></div>
+              <div class="btn-reove"><i class="uil uil-trash-alt"></i></div>
+            </div>
+          </div>
+
+          <div class="container-content note-content">
+            <div class="note-icon-title-container">
+              <div class="icon-container">
+                <i class="uil uil-shopping-cart-alt note-icon"></i>
+              </div>
+              <h3>Note Title</h3>
+            </div>
+            <div class="date-created">
+              <h4>April 20, 2021</h4>
+            </div>
+            <div class="name-category">
+              <h4>Task</h4>
+            </div>
+            <div class="content">
+              <h4>Tomatoes, bread</h4>
+            </div>
+            <div class="dates">
+              <h4>25/5/2021, 5/5/2021</h4>
+            </div>
+            <div class="btns-container">
+              <div class="btn-edit"><i class="uil uil-pen"></i></div>
+              <div class="btn-archive"><i class="uil uil-archive-alt"></i></div>
+              <div class="btn-reove"><i class="uil uil-trash-alt"></i></div>
+            </div>
+          </div>
+          <div class="container-content note-content">
+            <div class="note-icon-title-container">
+              <div class="icon-container">
+                <i class="uil uil-shopping-cart-alt note-icon"></i>
+              </div>
+              <h3>Note Title</h3>
+            </div>
+            <div class="date-created">
+              <h4>April 20, 2021</h4>
+            </div>
+            <div class="name-category">
+              <h4>Task</h4>
+            </div>
+            <div class="content">
+              <h4>Tomatoes, bread</h4>
+            </div>
+            <div class="dates">
+              <h4>25/5/2021, 5/5/2021</h4>
+            </div>
+            <div class="btns-container">
+              <div class="btn-edit"><i class="uil uil-pen"></i></div>
+              <div class="btn-archive"><i class="uil uil-archive-alt"></i></div>
+              <div class="btn-reove"><i class="uil uil-trash-alt"></i></div>
+            </div>
+          </div>
+        </div>
+        <button class="btn-create-note">Create Note</button>
+      </section>
+
+      <section class="other">
+        <div class="component-header note-category-header">
+          <h3 class="note-category">Note Category</h3>
+          <h3 class="note-active">Active</h3>
+          <h3 class="note-archived">Archived</h3>
+        </div>
+
+        <div class="notes-container">
+          <div class="container-content note-category-content">
+            <div class="note-icon-title-container">
+              <div class="icon-container">
+                <i class="uil uil-shopping-cart-alt note-icon"></i>
+              </div>
+              <h3>Task</h3>
+            </div>
+            <div class="active-number">
+              <h4>13</h4>
+            </div>
+            <div class="archived-number">
+              <h4>4</h4>
+            </div>
+          </div>
+
+          <div class="container-content note-category-content">
+            <div class="note-icon-title-container">
+              <div class="icon-container">
+                <i class="uil uil-shopping-cart-alt note-icon"></i>
+              </div>
+              <h3>Task</h3>
+            </div>
+            <div class="active-number">
+              <h4>13</h4>
+            </div>
+            <div class="archived-number">
+              <h4>4</h4>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
   </body>
 </html>
