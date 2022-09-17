@@ -37,7 +37,7 @@ h6 {
   font-size: 1.5rem;
 }
 
-.current-notes {
+.active-notes {
   display: grid;
   margin-bottom: 100px;
 }
@@ -91,6 +91,15 @@ h6 {
   font-weight: 500;
   font-size: 1rem;
   padding-left: 5px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.content {
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .btn-edit,
@@ -124,6 +133,14 @@ h6 {
 
 .note-category-content {
   grid-template-columns: 40% 25% 35%;
+}
+
+.archived-header {
+  cursor: pointer;
+}
+
+.archived-header:hover {
+  background-color: #5a5a5a;
 }
 
 .active-number > h4,
@@ -162,8 +179,25 @@ h6 {
 
 .modal__header {
   font-size: 3.25rem;
-  margin-bottom: 4.5rem;
+  margin-bottom: 2.5rem;
   line-height: 1.5;
+  text-align: center;
+}
+
+.select-category {
+  font-size: 1.2rem;
+  font-family: inherit;
+}
+
+.add-content {
+  font-size: 1.2rem;
+  font-family: inherit;
+  height: 200px;
+}
+
+.form-btns {
+  display: flex;
+  justify-content: center;
 }
 
 .modal__form {
@@ -172,6 +206,7 @@ h6 {
   grid-template-columns: 1fr 2fr;
   align-items: center;
   gap: 2.5rem;
+  margin-bottom: 2rem;
 }
 
 .modal__form label {
@@ -205,6 +240,7 @@ h6 {
 }
 
 .hidden {
+  display: none;
   visibility: hidden;
   opacity: 0;
 }

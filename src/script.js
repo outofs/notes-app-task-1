@@ -1,11 +1,22 @@
+import { extractDates, dateCreated } from "./helper.js";
+import { monthNames, notesObj, randomId } from "./config.js";
+import {
+  displayNotes,
+  displayArchivedNotes,
+  displayCategories,
+} from "./renderContent.js";
+
+/////////////////////////////////////////////////USED ELEMENTS/////////////////////////////////////////////////
+
+// App elements
 const crateNoteBtn = document.querySelector(".btn-create-note");
 const modalWindow = document.querySelector(".modal");
 const overlay = document.querySelector(".overlay");
 const closeModalWindow = document.querySelector(".btn--close-modal");
-const notesContainer = document.querySelector(".notes-container");
+const archivedHeader = document.querySelector(".archived-header");
 const archivedContainer = document.querySelector(".archived-container");
 
-//Form elements
+//Modal elements
 const addTitle = document.querySelector(".add-title");
 const addCategory = document.querySelector(".select-category");
 const addContent = document.querySelector(".add-content");
@@ -13,59 +24,32 @@ const btnDoneCreate = document.querySelector(".btn-done-create");
 const btnDoneEdit = document.querySelector(".btn-done-edit");
 
 let idElem;
-let notesObj = [
-  {
-    created: "March 25, 2022",
-    title: "Note 1",
-    category: "Random Thought",
-    content: "go home",
-    dates: "dates",
-    archived: false,
-  },
-  {
-    created: "June 2, 2022",
-    title: "Buy Coffe",
-    category: "Task",
-    content: "Buy coffe",
-    dates: "dates",
-    archived: false,
-  },
-  {
-    created: "July 15, 2022",
-    title: "I have an idea!",
-    category: "Idea",
-    content: "Make a notelist",
-    dates: "dates",
-    archived: false,
-  },
-  {
-    created: "August 20, 2022",
-    title: "122233",
-    category: "Quote",
-    content: "lorem",
-    dates: "dates",
-    archived: false,
-  },
-];
 
-const monthNames = [
-  "January",
-  "February",
-  "March",
-  "April",
-  "May",
-  "June",
-  "July",
-  "August",
-  "September",
-  "October",
-  "November",
-  "December",
+/////////////////////////////////////////////////FUNCTIONS/////////////////////////////////////////////////
+
+const countActiveAndArchived = function (category) {
+  return {
+    name: category,
+    active: notesObj.filter(
+      (item) => item.category === category && item.archived === false
+    ).length,
+    archived: notesObj.filter(
+      (item) => item.category === category && item.archived === true
+    ).length,
+  };
+};
+
+let categories = [
+  countActiveAndArchived("Task"),
+  countActiveAndArchived("Random Thought"),
+  countActiveAndArchived("Idea"),
+  countActiveAndArchived("Quote"),
 ];
 
 const hideOverlayAndModal = function () {
   modalWindow.classList.add("hidden");
   overlay.classList.add("hidden");
+
   cleanInputs();
 };
 
@@ -76,156 +60,114 @@ const displayOverlayAndModal = function () {
 
 const cleanInputs = function () {
   addTitle.value = "";
-  addCategory.value = "random";
   addContent.value = "";
 };
 
-const dateCreated = function () {
-  const date = new Date();
-  return `${
-    monthNames[date.getMonth()]
-  } ${date.getDate()}, ${date.getFullYear()}`;
+const updatePage = function () {
+  displayArchivedNotes(notesObj);
+  displayNotes(
+    notesObj,
+    removeNote,
+    editNote,
+    archiveNote,
+    hideOverlayAndModal
+  );
+  displayCategories(categories, countActiveAndArchived);
 };
 
-const icon = function (value) {
-  if (value === "Task") {
-    return "uil-shopping-cart-alt";
-  } else if (value === "Random Thought") {
-    return "uil-cog";
-  } else if (value === "Idea") {
-    return "uil-lightbulb";
-  } else if (value === "Quote") {
-    return "uil-google-hangouts-alt";
-  }
+const removeNote = function (id) {
+  const currentElement = notesObj.findIndex((note) => `${note.id}` === id);
+  notesObj.splice(currentElement, 1);
+
+  updatePage();
 };
+
+const editNote = function (id) {
+  displayOverlayAndModal();
+
+  btnDoneEdit.classList.remove("hidden");
+  btnDoneCreate.classList.add("hidden");
+
+  const currentElement = notesObj.findIndex((note) => `${note.id}` === id);
+  idElem = currentElement;
+
+  addTitle.value = notesObj[currentElement].title;
+  addCategory.value = notesObj[currentElement].category;
+  addContent.value = notesObj[currentElement].content;
+};
+
+const archiveNote = function (id) {
+  const currentElement = notesObj.findIndex((note) => `${note.id}` === id);
+  notesObj[currentElement].archived = !notesObj[currentElement].archived;
+
+  updatePage();
+};
+
+/////////////////////////////////////////////////EVENT LISTENERS/////////////////////////////////////////////////
 
 closeModalWindow.addEventListener("click", hideOverlayAndModal);
 
-crateNoteBtn.addEventListener("click", displayOverlayAndModal);
+crateNoteBtn.addEventListener("click", function () {
+  displayOverlayAndModal();
+
+  btnDoneCreate.classList.remove("hidden");
+  btnDoneEdit.classList.add("hidden");
+});
 
 btnDoneCreate.addEventListener("click", function (e) {
   e.preventDefault();
+
   if (addTitle.value === "" || addContent.value === "") {
     return alert("Please fill inpututs!");
   }
 
   const myObj = {
-    created: dateCreated(),
+    id: randomId(),
+    created: dateCreated(monthNames),
     title: addTitle.value,
     category: addCategory.value,
     categoryText: addCategory.textContent,
     content: addContent.value,
-    dates: "dates",
+    dates: extractDates(addContent.value),
     archived: false,
   };
   notesObj.push(myObj);
 
   cleanInputs();
-  displayNotes();
+  updatePage();
 });
-///Show notes
-
-const displayNotes = function () {
-  const activeNotes = notesObj.filter((note) => !note.archived && note);
-  let html = "";
-
-  activeNotes.forEach((element, index) => {
-    html += `
-    <div class="container-content note-content">
-            <div class="note-icon-title-container">
-              <div class="icon-container">
-                <i class="uil ${icon(element.category)} note-icon"></i>
-              </div>
-              <h3>${element.title}</h3>
-            </div>
-            <div class="date-created">
-              <h4>${element.created}</h4>
-            </div>
-            <div class="name-category">
-              <h4>${element.category}</h4>
-            </div>
-            <div class="content">
-              <h4>${element.content}</h4>
-            </div>
-            <div class="dates">
-              <h4>${element.dates}</h4>
-            </div>
-            <div class="btns-container">
-              <div class="btn-edit" id='${index}' onClick='editNote(this.id)'><i class="uil uil-pen"></i></div>
-              <div class="btn-archive" id='${index}'onClick='archiveNote(this.id)'><i class="uil uil-archive-alt"></i></div>
-              <div class="btn-remove" id='${index}' onClick='removeNote(this.id)'><i class="uil uil-trash-alt"></i></div>
-            </div>
-          </div>
-    `;
-  });
-
-  notesContainer.innerHTML = html;
-  hideOverlayAndModal();
-};
-
-displayNotes();
-
-const removeNote = function (id) {
-  notesObj.splice(id, 1);
-  displayNotes();
-};
-
-const editNote = function (id) {
-  displayOverlayAndModal();
-  idElem = id;
-  addTitle.value = notesObj[id].title;
-  addCategory.value = notesObj[id].category;
-  addContent.value = notesObj[id].content;
-};
 
 btnDoneEdit.addEventListener("click", function (e) {
   e.preventDefault();
+
   notesObj[idElem] = {
-    created: dateCreated(),
+    created: dateCreated(monthNames),
     title: addTitle.value,
     category: addCategory.value,
     content: addContent.value,
-    dates: "dates",
+    dates: extractDates(addContent.value),
     archived: false,
   };
+
   cleanInputs();
-  displayNotes();
+  updatePage();
 });
 
-const archiveNote = function (id) {
-  notesObj[id].archived = !notesObj[id].archived;
-  const archivedNotes = notesObj.filter((note) => (note.archived ? note : ""));
-  let html = "";
-  archivedNotes.forEach((element, index) => {
-    html += `
-    <div class="container-content note-content">
-            <div class="note-icon-title-container">
-              <div class="icon-container">
-                <i class="uil ${icon(element.category)} note-icon"></i>
-              </div>
-              <h3>${element.title}</h3>
-            </div>
-            <div class="date-created">
-              <h4>${element.created}</h4>
-            </div>
-            <div class="name-category">
-              <h4>${element.category}</h4>
-            </div>
-            <div class="content">
-              <h4>${element.content}</h4>
-            </div>
-            <div class="dates">
-              <h4>${element.dates}</h4>
-            </div>
-            <div class="btns-container">
-              <div class="btn-edit" id='${index}' onClick='editNote(this.id)'><i class="uil uil-pen"></i></div>
-              <div class="btn-archive" id='${index}'onClick='archiveNote(this.id)'><i class="uil uil-archive-alt"></i></div>
-              <div class="btn-remove" id='${index}' onClick='removeNote(this.id)'><i class="uil uil-trash-alt"></i></div>
-            </div>
-          </div>
-    `;
-  });
+archivedHeader.addEventListener("click", function () {
+  archivedContainer.classList.toggle("hidden");
+});
 
-  archivedContainer.innerHTML = html;
-  displayNotes();
-};
+//////////////////////////////////////////////////////////////////////APP//////////////////////////////////////////////////////////////////////
+try {
+  displayArchivedNotes(notesObj);
+  displayNotes(
+    notesObj,
+    removeNote,
+    editNote,
+    archiveNote,
+    hideOverlayAndModal
+  );
+  displayCategories(categories, countActiveAndArchived);
+} catch (error) {
+  console.error(error);
+}
